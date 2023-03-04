@@ -1,0 +1,60 @@
+import {
+  Box,
+  Button,
+  ChakraProvider,
+  Container,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Heading,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  VStack,
+} from "@chakra-ui/react";
+import { useStore } from "effector-react";
+import React from "react";
+import { maximumAutoConnectionsPerSessionChanged } from "../../shared/events/maximumAutoConnectionsPerSessionChanged";
+import { optionsSubmitted } from "../events/optionsSubmitted";
+import { maximumAutoConnectionsPerSessionStore } from "../../shared/stores/maximumAutoConnectionsPerSessionStore";
+import { darkChakraTheme } from "../../shared/constants/darkChakraTheme";
+import { ToastContainer } from "../effects/displayOptionsSavedToast";
+
+export function OptionsPage() {
+  const maximumAutoConnectionsPerSession = useStore(maximumAutoConnectionsPerSessionStore);
+  ToastContainer;
+  return (
+    <ChakraProvider theme={darkChakraTheme}>
+      <ToastContainer />
+      <Container backgroundColor="black" padding="5" borderRadius="md" marginY="5">
+        <VStack spacing={3} align="stretch">
+          <Box>
+            <Heading as="h1" size="md">
+             Number Of AutoConnect 
+            </Heading>
+          </Box>
+          <Box>
+            <FormControl>
+              <FormLabel>Maximum auto-connections per session</FormLabel>
+              <NumberInput value={maximumAutoConnectionsPerSession} onChange={maximumAutoConnectionsPerSessionChanged}>
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              <FormHelperText>Automatically stops connecting after reaching this value.</FormHelperText>
+            </FormControl>
+          </Box>
+          <Box>
+            <Button colorScheme="blue" onClick={() => optionsSubmitted()}>
+              Save 
+            </Button>
+          </Box>
+        </VStack>
+      </Container>
+    </ChakraProvider>
+  );
+}
